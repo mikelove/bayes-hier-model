@@ -164,3 +164,36 @@ $$ Z = \frac{1}{n-2} \sum_{i=1}^n y_i^2 $$
 This can be thought of as estimating A + 1 = observed variance
 
 This makes sense: $y_i = \mu_i + \varepsilon_i$
+
+---
+
+# Let's try this out
+
+\[
+\begin{align}
+\hat{\mu}_i^{MLE} &= y_i \\ 
+\hat{\mu}_i^{naive} &= 0
+\end{align}
+\]
+
+```{r, fig.width=12, echo=FALSE}
+jamesstein <- function(y) {
+  n <- length(y)
+  z <- 1/(n-2) * sum(y^2)
+  (1 - 1/z) * y
+}
+rafalib::bigpar(1,3)
+drawit <- function(A) {
+  mse <- t(replicate(100, {
+    mu <- rnorm(50, 0, sqrt(A))
+    y <- rnorm(50, mu, 1)
+    c(MLE=sqrt(mean((mu - y)^2)), JS=sqrt(mean((mu - jamesstein(y))^2)))
+  }))
+  boxplot(mse, ylim=c(0,max(2,sqrt(A)+.5)), col="wheat", ylab="RMSE", main=paste0("A = ",A))
+  abline(h=sqrt(A), col="red", lwd=3)
+  abline(h=0, col="grey50")
+}
+drawit(1)
+drawit(9)
+drawit(.1)
+```
