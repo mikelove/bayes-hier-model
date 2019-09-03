@@ -1,0 +1,99 @@
+---
+title: Bayesian Hierarchical Models
+subtitle: Stein Lab meeting 9.4.2019
+author: Michael Love
+framework: io2012
+highlighter: highlight.js
+hitheme: tomorrow_night
+widgets: mathjax
+mode: selfcontained
+knit: slidify::knit2slides
+---
+
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(fig.width=7, fig.height=5, cache=FALSE) 
+```
+
+# Start with Bayesian model
+
+What is a likelihood? Suppose:
+
+$$ y_i \sim N(\mu, 1) $$
+
+```{r}
+set.seed(1)
+y <- rnorm(5, mean=4, sd=1)
+```
+
+```{r echo=FALSE, fig.width=9}
+rafalib::bigpar(1,2)
+plot(y, rep(0,5), xlim=c(0,8), ylim=c(0, 1),
+     xlab=expression(mu),
+     yaxt="n", col="blue", ylab="likelihood")
+abline(h=0, col=rgb(0,0,0,.2))
+s <- 0:80/10
+for (i in 1:5) {
+  lines(s, dnorm(s, y[i], 1), col="blue")
+}
+plot(y, rep(0,5), xlim=c(0,8), ylim=c(0, 1),
+     xlab=expression(mu),
+     yaxt="n", col="blue", ylab="likelihood")
+abline(h=0, col=rgb(0,0,0,.2))
+s <- 0:800/100
+z <- exp(rowSums(sapply(y, function(yy) dnorm(s, yy, 1, log=TRUE))))
+lines(s, 100*z/sum(z), col="blue")
+```
+
+---
+
+# Bayesian model
+
+What is a posterior? Likelihood $\times$ some other distribution
+
+$$ f(\hat{\mu}) \propto \prod_i \left[ \varphi(y_i; \mu=\hat{\mu}, \sigma=1) \right] \times g(\hat{\mu}) $$
+
+```{r echo=FALSE, fig.width=12}
+rafalib::bigpar(1,3)
+plot(y, rep(0,5), xlim=c(0,8), ylim=c(0, 1),
+     xlab=expression(mu),
+     yaxt="n", col="blue", ylab="likelihood")
+abline(h=0, col=rgb(0,0,0,.2))
+s <- 0:80/10
+for (i in 1:5) {
+  lines(s, dnorm(s, y[i], 1), col="blue")
+}
+plot(y, rep(0,5), xlim=c(0,8), ylim=c(0, 1),
+     xlab=expression(mu),
+     yaxt="n", col="blue", ylab="posterior")
+abline(h=0, col=rgb(0,0,0,.2))
+s <- 0:800/100
+z <- exp(rowSums(sapply(y, function(yy) dnorm(s, yy, 1, log=TRUE))))
+zz <- dnorm(s, 2, 2) * exp(rowSums(sapply(y, function(yy) dnorm(s, yy, 1, log=TRUE))))
+lines(s, 100*z/sum(z), col="blue")
+lines(s, dnorm(s, 2, 2), col="red")
+lines(s, 100*zz/sum(zz), col="purple")
+plot(y, rep(0,5), xlim=c(0,8), ylim=c(0, 1),
+     xlab=expression(mu),
+     yaxt="n", col="blue", ylab="posterior")
+abline(h=0, col=rgb(0,0,0,.2))
+s <- 0:800/100
+z <- exp(rowSums(sapply(y, function(yy) dnorm(s, yy, 1, log=TRUE))))
+zz <- dnorm(s, 6, 1) * exp(rowSums(sapply(y, function(yy) dnorm(s, yy, 1, log=TRUE))))
+lines(s, 100*z/sum(z), col="blue")
+lines(s, dnorm(s, 6, 1), col="red")
+lines(s, 100*zz/sum(zz), col="purple")
+```
+
+---
+
+# What is a Bayesian Hierarchical Model?
+
+<center>
+<img height=300 src="map.jpg">
+</center>
+
+* Like before, Bayesian model for data $y_i$
+* But there is some structure in the data
+* E.g. suppose we have data on schools, schools are in grouped into regions
+* So we now have multiple $\mu$ to estimate, they are related to each other
+
