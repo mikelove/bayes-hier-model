@@ -10,6 +10,15 @@ mode: selfcontained
 knit: slidify::knit2slides
 ---
 
+<style>
+em {
+    font-style: italic
+}
+strong {
+    font-weight: bold;
+}
+</style>
+
 ```{r include=FALSE, cache=FALSE}
 knitr::opts_chunk$set(fig.width=7, fig.height=5, cache=FALSE) 
 ```
@@ -95,5 +104,63 @@ lines(s, 100*zz/sum(zz), col="purple")
 * Like before, Bayesian model for data $y_i$
 * But there is some structure in the data
 * E.g. suppose we have data on schools, schools are in grouped into regions
-* So we now have multiple $\mu$ to estimate, they are related to each other
+* So we now have multiple $\mu$ to estimate (say, one per school), they are related to each other
 
+---
+
+# A simple hierarchical model to start
+
+$$
+\begin{align} 
+y_i \mid \mu_i &\sim N(\mu_i, \sigma^2=1) \\
+\mu_i &\sim N(0, \sigma^2=A) \\
+\hat{\mu}_i^{Bayes} \mid A &= \left(1 - \frac{1}{A+1} \right) y_i
+\end{align}
+$$
+
+> "Stein's Estimation Rule and Its Competitors - An Empirical Bayes Approach."
+> Bradley Efron and Carl Morris,
+> *Journal of the American Statistical Association*,
+> Vol. 68, No. 341 (Mar., 1973), pp. 117-130 (14 pages)
+> <https://doi.org/10.2307/2284155>
+
+---
+
+# Let's plug in some numbers
+
+Let's try A = 1 (SD = 1) and A = 9 (SD = 3)
+
+```{r}
+mu <- rnorm(50, 0, sqrt(1))
+y <- rnorm(50, mu, 1)
+```
+
+```{r echo=FALSE, fig.width=12}
+rafalib::bigpar(1,2)
+rafalib::nullplot(-4,4,.9,2.1, yaxt="n")
+axis(2,1:2,c("Bayes",expression(y[i])),las=2)
+segments(y, rep(2,10), (1 - 1/(1 + 1))*y, rep(1,10))
+mu <- rnorm(50, 0, sqrt(9))
+y <- rnorm(50, mu, 1)
+rafalib::nullplot(-8,8,.9,2.1, yaxt="n")
+axis(2,1:2,c("Bayes",expression(y[i])),las=2)
+segments(y, rep(2,10), (1 - 1/(9 + 1))*y, rep(1,10))
+```
+
+---
+
+# What if A is not know?
+
+*empirical Bayes* = estimate distribution of $\mu_i$ using $y_i$
+
+e.g. consider
+
+$$ \hat{\mu}_i^{James-Stein} = \left(1 - \frac{1}{Z} \right) y_i $$
+
+where
+
+$$ Z = \frac{1}{n-2} \sum_{i=1}^n y_i^2 $$
+
+This can be thought of as estimating A + 1 = observed variance
+
+This makes sense: $y_i = \mu_i + \varepsilon_i$
