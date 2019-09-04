@@ -4,7 +4,7 @@ subtitle: Stein Lab meeting 9.4.2019
 author: Michael Love
 framework: io2012
 highlighter: highlight.js
-hitheme: tomorrow_night
+hitheme: solarized_light
 widgets: mathjax
 mode: selfcontained
 knit: slidify::knit2slides
@@ -137,12 +137,12 @@ y <- rnorm(50, mu, 1)
 
 ```{r echo=FALSE, fig.width=12}
 rafalib::bigpar(1,2)
-rafalib::nullplot(-4,4,.9,2.1, yaxt="n")
+rafalib::nullplot(-4,4,.9,2.1, yaxt="n", main="A = 1")
 axis(2,1:2,c("Bayes",expression(y[i])),las=2)
 segments(y, rep(2,10), (1 - 1/(1 + 1))*y, rep(1,10))
 mu <- rnorm(50, 0, sqrt(9))
 y <- rnorm(50, mu, 1)
-rafalib::nullplot(-8,8,.9,2.1, yaxt="n")
+rafalib::nullplot(-8,8,.9,2.1, yaxt="n", main="A = 9")
 axis(2,1:2,c("Bayes",expression(y[i])),las=2)
 segments(y, rep(2,10), (1 - 1/(9 + 1))*y, rep(1,10))
 ```
@@ -197,3 +197,137 @@ drawit(1)
 drawit(9)
 drawit(.1)
 ```
+
+---
+
+# A more complex model
+
+Add another level of hierarchy, e.g. schools ($\mu_i$) clustered in
+regions ($\theta_k$). 
+
+$k(i)$ gives the region for school $i$.
+
+\[
+\begin{align}
+y_i \mid \mu_i &\sim N(\mu_i, 1) \\
+\mu_i \mid \theta_{k(i)} &\sim N(\theta_{k(i)}, 1) \\
+\theta_k &\sim N(0, 5)
+\end{align}
+\]
+
+I've purposefully made the regions separate (5 > 1) to show the
+utility of this model.
+
+This is not so simple to compute, so we will switch to using a tool
+called Stan. There are multiple frameworks for performing MCMC where
+one specifies the data, parameters, and model, and then samples are
+drawn from the posterior. Stan is very fast.
+
+---
+
+# How does this look in Stan?
+
+<br><br><br>
+
+\[
+\begin{align}
+y_i \mid \mu_i &\sim N(\mu_i, 1) \\
+\mu_i \mid \theta_{k(i)} &\sim N(\theta_{k(i)}, 1) \\
+\theta_k &\sim N(0, 5)
+\end{align}
+\]
+
+```{r, eval=FALSE}
+y ~ normal(mu, 1);
+mu ~ normal(theta[x], 1);
+theta ~ normal(0, 5);
+```
+
+---
+
+# The full model in Stan
+
+```{r, eval=FALSE}
+data {
+  int k;
+  int n;
+  int x[n];
+  vector[n] y;
+}
+parameters {
+  vector[k] theta;
+  vector[n] mu;
+}
+model {
+    y ~ normal(mu, 1);
+    mu ~ normal(theta[x], 1);
+    theta ~ normal(0, 5);
+}
+```
+
+---
+
+# Model output (n=40, k=4)
+
+This model samples very fast in Stan (hundreds of a second). We can
+look at posterior distributions: 
+
+<center>
+<img src="post_theta.png">
+</center>
+
+---
+
+# Compared to truth
+
+
+<center>
+<img src="theta.png">
+</center>
+
+---
+
+# Look at the school level ($\mu_i$):
+
+<center>
+<img src="shrink.png">
+</center>
+
+---
+
+# Did we do better than MLE?
+
+<center>
+<img src="mu.png">
+</center>
+
+---
+
+# Did we do better than MLE?
+
+<center>
+<img src="mu_err.png">
+</center>
+
+---
+
+
+# Look at the school level ($\mu_i$):
+
+<center>
+<img src="shrink.png">
+</center>
+
+Under what scenario will Bayes be better than a simpler per-region estimator:
+
+James-Stein $\approx \left(1 - \frac{V_y}{V_\mu + V_y} \right)$ to shrink?
+
+---
+
+# When are Bayesian models useful?
+
+* Importantly, it has to run without errors, not all problems "work"
+* Bayes estimators converge to MLE as $n \to \infty$, so small $n$
+* Or, small $n$ / higher SNR for *some* groups
+* Example: some schools have not much data, some regions have few schools
+* Or, sharing information for estimating mid-level parameters, e.g. $V_\mu$

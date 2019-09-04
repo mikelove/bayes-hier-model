@@ -11,5 +11,5 @@ parameters {
 model {
     y ~ normal(mu, 1);
     mu ~ normal(theta[x], 1);
-    theta ~ normal(0, 2);
+    theta ~ normal(0, 5);
 }
