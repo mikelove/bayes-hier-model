@@ -331,3 +331,57 @@ James-Stein $\approx \left(1 - \frac{V_y}{V_\mu + V_y} \right)$ to shrink?
 * Or, small $n$ / higher SNR for *some* groups
 * Example: some schools have not much data, some regions have few schools
 * Or, sharing information for estimating mid-level parameters, e.g. $V_\mu$
+
+---
+
+# Many Bayesian Hierarchical Models in genomics
+
+* limma, edgeR, DESeq2/apeglm
+* These are *empirical Bayes*, don't involve MCMC
+
+<center>
+<img src="deseq2.png">
+</center>
+
+---
+
+# Bayesian Hierarchical Models in GWAS
+
+* eCAVIAR - estimated regression coefficients multivariate normal
+* Zhang, ..., Chatterjee, *Estimation of complex effect-size distributions using summary-level statistics*
+  [Nat Gen](https://www.nature.com/articles/s41588-018-0193-x) (2018)
+
+<center>
+<img src="chatt1.png"><br>
+$\dots$
+</center>
+
+
+
+<center>
+<img src="chatt2.png"><br>
+$\dots$ 
+</center>
+
+
+<center>
+<img src="chatt3.png">
+</center>
+
+---
+
+# Modeling TF binding across cell types
+
+* Love *et al* *Role of the chromatin landscape and sequence in
+determining ... binding* [NAR](https://academic.oup.com/nar/article/45/4/1805/2605828) (2017)
+
+<center>
+<img src="gr.png">
+</center>
+
+---
+
+# Why Bayesian Hierarchical Models for Stein lab datasets?
+
+* MR Locus - 
+* pathQTL - 
