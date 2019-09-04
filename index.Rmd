@@ -381,7 +381,27 @@ determining ... binding* [NAR](https://academic.oup.com/nar/article/45/4/1805/26
 
 ---
 
+# Modeling TF binding across cell types
+
+<center>
+<img src="gr2.png">
+</center>
+
+---
+
 # Why Bayesian Hierarchical Models for Stein lab datasets?
 
-* MR Locus - 
-* pathQTL - 
+What do we gain over a more heuristic alternative?
+
+> * MR Locus 
+    - aim: estimate the strength of signal for $\uparrow$ eQTL, $\uparrow$ GWAS
+    - heuristic: condition analysis, $\beta$-eCAVIAR, threshold on $\beta$,
+      simple linear regression
+    - plus: the mixture model for small / large effects obviates need to
+      threshold
+    - plus: include uncertainty on the $\beta$ (?)	
+> * pathQTL 
+    - aim: cell-type specific mediation paths, incorporate multiple layers
+    - heuristic: mediation on cell types separately
+    - plus: similar to the TF binding case, focus on cell-type diffs
+    - plus: incorporate SNR into the mediation model (?)
