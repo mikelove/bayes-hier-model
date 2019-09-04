@@ -345,9 +345,9 @@ James-Stein $\approx \left(1 - \frac{V_y}{V_\mu + V_y} \right)$ to shrink?
 
 ---
 
-# Bayesian Hierarchical Models in GWAS
+# Bayesian Hierarchical Models in eQTL and GWAS
 
-* eCAVIAR - estimated regression coefficients multivariate normal
+* eCAVIAR - estimated regression coefficients ~ multivariate normal
 * Zhang, ..., Chatterjee, *Estimation of complex effect-size distributions using summary-level statistics*
   [Nat Gen](https://www.nature.com/articles/s41588-018-0193-x) (2018)
 
@@ -372,7 +372,7 @@ $\dots$
 
 # Modeling TF binding across cell types
 
-* Love *et al* *Role of the chromatin landscape and sequence in
+* Love *et al*, *Role of the chromatin landscape and sequence in
 determining ... binding* [NAR](https://academic.oup.com/nar/article/45/4/1805/2605828) (2017)
 
 <center>
@@ -383,8 +383,10 @@ determining ... binding* [NAR](https://academic.oup.com/nar/article/45/4/1805/26
 
 # Modeling TF binding across cell types
 
+<br><br><br>
+
 <center>
-<img src="gr2.png">
+<img width=900 src="gr2.png">
 </center>
 
 ---
@@ -393,15 +395,13 @@ determining ... binding* [NAR](https://academic.oup.com/nar/article/45/4/1805/26
 
 What do we gain over a more heuristic alternative?
 
-> * MR Locus 
-    - aim: estimate the strength of signal for $\uparrow$ eQTL, $\uparrow$ GWAS
-    - heuristic: condition analysis, $\beta$-eCAVIAR, threshold on $\beta$,
-      simple linear regression
-    - plus: the mixture model for small / large effects obviates need to
-      threshold
-    - plus: include uncertainty on the $\beta$ (?)	
-> * pathQTL 
-    - aim: cell-type specific mediation paths, incorporate multiple layers
-    - heuristic: mediation on cell types separately
-    - plus: similar to the TF binding case, focus on cell-type diffs
-    - plus: incorporate SNR into the mediation model (?)
+> * **MR Locus**
+> * aim: estimate the strength of signal for $\uparrow$ eQTL, $\uparrow$ GWAS
+> * heuristic: condition analysis, $\beta$-eCAVIAR, threshold on $\beta$, simple linear regression
+> * Bayes+: the mixture model for small / large effects obviates need to threshold
+> * Bayes+: include uncertainty on the $\beta$ (?)
+> * **pathQTL**
+> * aim: cell-type specific mediation paths, incorporate multiple layers
+> * heuristic: mediation on cell types separately
+> * Bayes+: similar to the TF binding case, focus on cell-type diffs
+> * Bayes+: incorporate SNR into the mediation model (?)
