@@ -1,10 +1,10 @@
 ---
-title: Bayesian Hierarchical Models
-subtitle: Stein Lab meeting 9.4.2019
-author: Michael Love
+title: Bayesian Hierarchical Modeling
+subtitle: For Cell-Type-Specific Gene Regulation
+author: "Michael Love, Assistant Professor, Biostatistics & Genetics"
 framework: io2012
 highlighter: highlight.js
-hitheme: solarized_light
+hitheme: tomorrow
 widgets: mathjax
 mode: selfcontained
 knit: slidify::knit2slides
@@ -23,7 +23,42 @@ strong {
 knitr::opts_chunk$set(fig.width=7, fig.height=5, cache=FALSE) 
 ```
 
-# Start with Bayesian model
+# Biological aim: cell-type-specific regulation
+
+<br><br>
+
+<center>
+<img width=700 src="brain.jpg">
+</center>
+
+<p style="font-size: 12px; text-align:center">
+Mouse brain, dentate gyrus. Livet, Weissman, Sanes and Lichtman/Harvard University
+</p>
+
+---
+
+# Bayesian Hierarchical Models
+
+<center>
+<img height=600 src="google.png">
+</center>
+
+---
+
+# Let's demystify — what do we plan to do
+
+<br><br>
+
+> 1. A **parametric model** for regulation
+    - some parameter will represent an abstract relationship
+	- e.g. SNP $\rightarrow$ expression, or SNP $\rightarrow$ chromatin accessibility
+> 2. A **hierarchy** to compare these relationships across cell types
+> 3. Specify *arbitrary* **distributions** for the parameters, tying them together
+> 4. **Bayes** theory and computational frameworks to make inference
+
+---
+
+# Let's demystify
 
 What is a likelihood? Suppose:
 
@@ -110,6 +145,8 @@ lines(s, 100*zz/sum(zz), col="purple")
 
 # A simple hierarchical model to start
 
+<br><br><br>
+
 $$
 \begin{align} 
 y_i \mid \mu_i &\sim N(\mu_i, \sigma^2=1) \\
@@ -118,11 +155,15 @@ y_i \mid \mu_i &\sim N(\mu_i, \sigma^2=1) \\
 \end{align}
 $$
 
-> "Stein's Estimation Rule and Its Competitors - An Empirical Bayes Approach."
-> Bradley Efron and Carl Morris,
-> *Journal of the American Statistical Association*,
-> Vol. 68, No. 341 (Mar., 1973), pp. 117-130 (14 pages)
-> <https://doi.org/10.2307/2284155>
+<br><br>
+
+<p style="font-size: 12px; text-align:center">
+"Stein's Estimation Rule and Its Competitors - An Empirical Bayes Approach."
+Bradley Efron and Carl Morris, <br>
+Journal of the American Statistical Association,
+Vol. 68, No. 341 (Mar., 1973), pp. 117-130 (14 pages)
+<a href="https://doi.org/10.2307/2284155">DOI: 10.2307/2284155</a>
+</p>
 
 ---
 
@@ -215,6 +256,8 @@ y_i \mid \mu_i &\sim N(\mu_i, 1) \\
 \end{align}
 \]
 
+<br><br>
+
 I've purposefully made the regions separate (5 > 1) to show the
 utility of this model.
 
@@ -238,9 +281,9 @@ y_i \mid \mu_i &\sim N(\mu_i, 1) \\
 \]
 
 ```{r, eval=FALSE}
-y ~ normal(mu, 1);
-mu ~ normal(theta[x], 1);
-theta ~ normal(0, 5);
+                                 y ~ normal(mu, 1);
+                                 mu ~ normal(theta[k_i], 1);
+                                 theta ~ normal(0, 5);
 ```
 
 ---
@@ -251,7 +294,7 @@ theta ~ normal(0, 5);
 data {
   int k;
   int n;
-  int x[n];
+  int k_i[n];
   vector[n] y;
 }
 parameters {
@@ -260,7 +303,7 @@ parameters {
 }
 model {
     y ~ normal(mu, 1);
-    mu ~ normal(theta[x], 1);
+    mu ~ normal(theta[k_i], 1);
     theta ~ normal(0, 5);
 }
 ```
@@ -396,12 +439,12 @@ determining ... binding* [NAR](https://academic.oup.com/nar/article/45/4/1805/26
 What do we gain over a more heuristic alternative?
 
 > * **MR Locus**
-> * aim: estimate the strength of signal for $\uparrow$ eQTL, $\uparrow$ GWAS
-> * heuristic: condition analysis, $\beta$-eCAVIAR, threshold on $\beta$, simple linear regression
-> * Bayes+: the mixture model for small / large effects obviates need to threshold
-> * Bayes+: include uncertainty on the $\beta$ (?)
+    - aim: estimate the strength of signal for $\uparrow$ eQTL, $\uparrow$ GWAS
+    - heuristic: condition analysis, $\beta$-eCAVIAR, threshold on $\beta$, simple linear regression
+    - the mixture model for small / large effects obviates need to threshold
+    - include uncertainty on the $\beta$ (?)
 > * **pathQTL**
-> * aim: cell-type specific mediation paths, incorporate multiple layers
-> * heuristic: mediation on cell types separately
-> * Bayes+: similar to the TF binding case, focus on cell-type diffs
-> * Bayes+: incorporate SNR into the mediation model (?)
+    - aim: cell-type specific mediation paths, incorporate multiple layers
+    - heuristic: mediation on cell types separately
+    - similar to the TF binding case, focus on cell-type diffs
+    - incorporate SNR into the mediation model (?)
