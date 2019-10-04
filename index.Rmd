@@ -1,31 +1,19 @@
 ---
-title: Bayesian Hierarchical Modeling
-subtitle: For Cell-Type-Specific Gene Regulation
+title: "Bayesian Hierarchical Modeling of Cell-Type-Specific Gene Regulation"
 author: "Michael Love, Assistant Professor, Biostatistics & Genetics"
-framework: io2012
-highlighter: highlight.js
-hitheme: tomorrow
-widgets: mathjax
-mode: selfcontained
-knit: slidify::knit2slides
+output: 
+  revealjs::revealjs_presentation:
+    transition: none
+    highlight: kate
 ---
 
-<style>
-em {
-    font-style: italic
-}
-strong {
-    font-weight: bold;
-}
-</style>
-
 ```{r include=FALSE, cache=FALSE}
-knitr::opts_chunk$set(fig.width=7, fig.height=5, cache=FALSE) 
+knitr::opts_chunk$set(fig.width=7, fig.height=5, cache=TRUE) 
 ```
 
-# Biological aim: cell-type-specific regulation
+## Biological aim: cell-type-specific regulation
 
-<br><br>
+<p class="fragment">In particular, effect of common genetic variation on ...</p>
 
 <center>
 <img width=700 src="brain.jpg">
@@ -35,32 +23,24 @@ knitr::opts_chunk$set(fig.width=7, fig.height=5, cache=FALSE)
 Mouse brain, dentate gyrus. Livet, Weissman, Sanes and Lichtman/Harvard University
 </p>
 
----
-
-# Bayesian Hierarchical Models
+## Bayesian Hierarchical Models
 
 <center>
 <img height=600 src="google.png">
 </center>
 
----
+## Let's demystify — what do we plan to do
 
-# Let's demystify — what do we plan to do
+<br>
 
-<br><br>
+> - A **parametric model** for regulation
+> - Parameters will represent an abstract relationship
+> - E.g. SNP $\rightarrow$ expression, or SNP $\rightarrow$ chromatin accessibility
+> - A **hierarchy** to compare these across cell types
+> - Specify (arbitrary) **distributions** relating parameters to e/o
+> - **Bayes** theory and comp. frameworks to make inference
 
-> 1. A **parametric model** for regulation
-    - some parameter will represent an abstract relationship
-	- e.g. SNP $\rightarrow$ expression, or SNP $\rightarrow$ chromatin accessibility
-> 2. A **hierarchy** to compare these relationships across cell types
-> 3. Specify *arbitrary* **distributions** for the parameters, tying them together
-> 4. **Bayes** theory and computational frameworks to make inference
-
----
-
-# Let's demystify
-
-What is a likelihood? Suppose:
+## What is a likelihood? 
 
 $$ y_i \sim N(\mu, 1) $$
 
@@ -69,7 +49,7 @@ set.seed(1)
 y <- rnorm(5, mean=4, sd=1)
 ```
 
-```{r echo=FALSE, fig.width=9}
+```{r echo=FALSE, fig.width=8, fig.height=4}
 rafalib::bigpar(1,2)
 plot(y, rep(0,5), xlim=c(0,8), ylim=c(0, 1),
      xlab=expression(mu),
@@ -88,13 +68,13 @@ z <- exp(rowSums(sapply(y, function(yy) dnorm(s, yy, 1, log=TRUE))))
 lines(s, 100*z/sum(z), col="blue")
 ```
 
----
-
-# Bayesian model
+## Bayesian model
 
 What is a posterior? Likelihood $\times$ some other distribution
 
+<!-- 
 $$ f(\hat{\mu}) \propto \prod_i \left[ \varphi(y_i; \mu=\hat{\mu}, \sigma=1) \right] \times g(\hat{\mu}) $$
+-->
 
 ```{r echo=FALSE, fig.width=12}
 rafalib::bigpar(1,3)
@@ -128,22 +108,18 @@ lines(s, dnorm(s, 6, 1), col="red")
 lines(s, 100*zz/sum(zz), col="purple")
 ```
 
----
-
-# What is a Bayesian Hierarchical Model?
+## What is a Bayesian Hierarchical Model?
 
 <center>
 <img height=300 src="map.jpg">
 </center>
 
-* Like before, Bayesian model for data $y_i$
-* But there is some structure in the data
-* E.g. suppose we have data on schools, schools are in grouped into regions
-* So we now have multiple $\mu$ to estimate (say, one per school), they are related to each other
+> - Like before, Bayesian model for data $y_i$
+> - But there is some structure in the data
+> - E.g. data on schools, schools are in grouped into regions
+> - Multiple $\mu$ to estimate (say, one per school)
 
----
-
-# A simple hierarchical model to start
+## A simple hierarchical model to start
 
 <br><br><br>
 
@@ -165,9 +141,7 @@ Vol. 68, No. 341 (Mar., 1973), pp. 117-130 (14 pages)
 <a href="https://doi.org/10.2307/2284155">DOI: 10.2307/2284155</a>
 </p>
 
----
-
-# Let's plug in some numbers
+## Let's plug in some numbers
 
 Let's try A = 1 (SD = 1) and A = 9 (SD = 3)
 
@@ -188,27 +162,21 @@ axis(2,1:2,c("Bayes",expression(y[i])),las=2)
 segments(y, rep(2,10), (1 - 1/(9 + 1))*y, rep(1,10))
 ```
 
----
+## What if A is not know?
 
-# What if A is not know?
-
-*empirical Bayes* = estimate distribution of $\mu_i$ using $y_i$
-
-e.g. consider
+<br>
 
 $$ \hat{\mu}_i^{James-Stein} = \left(1 - \frac{1}{Z} \right) y_i $$
 
-where
+<p class="fragment">*Empirical Bayes* = estimate distribution of $\mu_i$ using $y_i$</p>
 
-$$ Z = \frac{1}{n-2} \sum_{i=1}^n y_i^2 $$
+<p class="fragment">where $Z = \frac{1}{n-2} \sum_{i=1}^n y_i^2$</p>
 
-This can be thought of as estimating A + 1 = observed variance
+<p class="fragment">Roughly: estimating A + 1 = observed variance </p>
 
-This makes sense: $y_i = \mu_i + \varepsilon_i$
+<p class="fragment">This makes sense: $y_i = \mu_i + \varepsilon_i$ </p>
 
----
-
-# Let's try this out
+## Let's try this out
 
 \[
 \begin{align}
@@ -239,9 +207,7 @@ drawit(9)
 drawit(.1)
 ```
 
----
-
-# A more complex model
+## A more complex model
 
 Add another level of hierarchy, e.g. schools ($\mu_i$) clustered in
 regions ($\theta_k$). 
@@ -256,8 +222,6 @@ y_i \mid \mu_i &\sim N(\mu_i, 1) \\
 \end{align}
 \]
 
-<br><br>
-
 I've purposefully made the regions separate (5 > 1) to show the
 utility of this model.
 
@@ -266,11 +230,9 @@ called Stan. There are multiple frameworks for performing MCMC where
 one specifies the data, parameters, and model, and then samples are
 drawn from the posterior. Stan is very fast.
 
----
+## How does this look in Stan?
 
-# How does this look in Stan?
-
-<br><br><br>
+<br>
 
 \[
 \begin{align}
@@ -281,14 +243,12 @@ y_i \mid \mu_i &\sim N(\mu_i, 1) \\
 \]
 
 ```{r, eval=FALSE}
-                                 y ~ normal(mu, 1);
-                                 mu ~ normal(theta[k_i], 1);
-                                 theta ~ normal(0, 5);
+y ~ normal(mu, 1);
+mu ~ normal(theta[k_i], 1);
+theta ~ normal(0, 5);
 ```
 
----
-
-# The full model in Stan
+## The full model in Stan
 
 ```{r, eval=FALSE}
 data {
@@ -308,9 +268,7 @@ model {
 }
 ```
 
----
-
-# Model output (n=40, k=4)
+## Model output (n=40, k=4)
 
 This model samples very fast in Stan (hundreds of a second). We can
 look at posterior distributions: 
@@ -319,55 +277,41 @@ look at posterior distributions:
 <img src="post_theta.png">
 </center>
 
----
-
-# Compared to truth
-
+## Compared to truth
 
 <center>
 <img src="theta.png">
 </center>
 
----
-
-# Look at the school level ($\mu_i$):
+## Look at the school level ($\mu_i$):
 
 <center>
 <img src="shrink.png">
 </center>
 
----
-
-# Did we do better than MLE?
+## Did we do better than MLE?
 
 <center>
 <img src="mu.png">
 </center>
 
----
-
-# Did we do better than MLE?
+## Did we do better than MLE?
 
 <center>
 <img src="mu_err.png">
 </center>
 
----
-
-
-# Look at the school level ($\mu_i$):
+## Look at the school level ($\mu_i$):
 
 <center>
 <img src="shrink.png">
 </center>
 
-Under what scenario will Bayes be better than a simpler per-region estimator:
+<p class="fragment">When will Bayes $>$ a simpler per-region estimator?</p>
 
-James-Stein $\approx \left(1 - \frac{V_y}{V_\mu + V_y} \right)$ to shrink?
+<p class="fragment">James-Stein $\approx \left(1 - \frac{V_y}{V_\mu + V_y} \right)$ to shrink?</p>
 
----
-
-# When are Bayesian models useful?
+## When are Bayesian models useful?
 
 * Importantly, it has to run without errors, not all problems "work"
 * Bayes estimators converge to MLE as $n \to \infty$, so small $n$
@@ -375,9 +319,7 @@ James-Stein $\approx \left(1 - \frac{V_y}{V_\mu + V_y} \right)$ to shrink?
 * Example: some schools have not much data, some regions have few schools
 * Or, sharing information for estimating mid-level parameters, e.g. $V_\mu$
 
----
-
-# Many Bayesian Hierarchical Models in genomics
+## BHM in genomics
 
 * limma, edgeR, DESeq2/apeglm
 * These are *empirical Bayes*, don't involve MCMC
@@ -386,11 +328,9 @@ James-Stein $\approx \left(1 - \frac{V_y}{V_\mu + V_y} \right)$ to shrink?
 <img src="deseq2.png">
 </center>
 
----
+## BHM in eQTL and GWAS
 
-# Bayesian Hierarchical Models in eQTL and GWAS
-
-* eCAVIAR - estimated regression coefficients ~ multivariate normal
+* eCAVIAR - estimated coefficients ~ multivariate normal
 * Zhang, ..., Chatterjee, *Estimation of complex effect-size distributions using summary-level statistics*
   [Nat Gen](https://www.nature.com/articles/s41588-018-0193-x) (2018)
 
@@ -399,21 +339,16 @@ James-Stein $\approx \left(1 - \frac{V_y}{V_\mu + V_y} \right)$ to shrink?
 $\dots$
 </center>
 
-
-
 <center>
 <img src="chatt2.png"><br>
 $\dots$ 
 </center>
 
-
 <center>
 <img src="chatt3.png">
 </center>
 
----
-
-# Modeling TF binding across cell types
+## Modeling TF binding across cell types
 
 * Love *et al*, *Role of the chromatin landscape and sequence in
 determining ... binding* [NAR](https://academic.oup.com/nar/article/45/4/1805/2605828) (2017)
@@ -422,9 +357,7 @@ determining ... binding* [NAR](https://academic.oup.com/nar/article/45/4/1805/26
 <img src="gr.png">
 </center>
 
----
-
-# Modeling TF binding across cell types
+## Modeling TF binding across cell types
 
 <br><br><br>
 
@@ -432,18 +365,16 @@ determining ... binding* [NAR](https://academic.oup.com/nar/article/45/4/1805/26
 <img width=900 src="gr2.png">
 </center>
 
----
-
-# Why Bayesian Hierarchical Models for Stein lab datasets?
+## BHM applied to neuronal assays in Stein lab
 
 What do we gain over a more heuristic alternative?
 
-> * **MR Locus**
+* **MR Locus**
     - aim: estimate the strength of signal for $\uparrow$ eQTL, $\uparrow$ GWAS
     - heuristic: condition analysis, $\beta$-eCAVIAR, threshold on $\beta$, simple linear regression
     - the mixture model for small / large effects obviates need to threshold
     - include uncertainty on the $\beta$ (?)
-> * **pathQTL**
+* **pathQTL**
     - aim: cell-type specific mediation paths, incorporate multiple layers
     - heuristic: mediation on cell types separately
     - similar to the TF binding case, focus on cell-type diffs
