@@ -209,8 +209,7 @@ drawit(.1)
 
 ## A more complex model
 
-Add another level of hierarchy, e.g. schools ($\mu_i$) clustered in
-regions ($\theta_k$). 
+Schools ($\mu_i$) clustered in regions ($\theta_k$). 
 
 $k(i)$ gives the region for school $i$.
 
@@ -222,13 +221,11 @@ y_i \mid \mu_i &\sim N(\mu_i, 1) \\
 \end{align}
 \]
 
-I've purposefully made the regions separate (5 > 1) to show the
-utility of this model.
-
-This is not so simple to compute, so we will switch to using a tool
-called Stan. There are multiple frameworks for performing MCMC where
-one specifies the data, parameters, and model, and then samples are
-drawn from the posterior. Stan is very fast.
+> - Not so simple to compute, switch to using a tool called Stan 
+> - Many frameworks for performing MCMC where one specifies the data, 
+    parameters, and model
+> - Then "samples" (of parameters) from the posterior 
+> - Stan is very fast.
 
 ## How does this look in Stan?
 
@@ -309,7 +306,7 @@ look at posterior distributions:
 
 <p class="fragment">When will Bayes $>$ a simpler per-region estimator?</p>
 
-<p class="fragment">James-Stein $\approx \left(1 - \frac{V_y}{V_\mu + V_y} \right)$ to shrink?</p>
+<p class="fragment">James-Stein $\approx \left(1 - \frac{V_y}{V_\mu + V_y} \right)$ to shrink</p>
 
 ## When are Bayesian models useful?
 
