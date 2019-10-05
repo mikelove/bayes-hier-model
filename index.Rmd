@@ -3,7 +3,7 @@ title: "Bayesian Hierarchical Modeling of Cell-Type-Specific Gene Regulation"
 author: "Michael Love, Assistant Professor, Biostatistics & Genetics"
 output: 
   revealjs::revealjs_presentation:
-    transition: none
+    transition: slide
     highlight: kate
 ---
 
