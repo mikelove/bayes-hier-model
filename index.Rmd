@@ -1,10 +1,11 @@
 ---
-title: "Bayesian Hierarchical Modeling of Cell-Type-Specific Gene Regulation"
-author: "Michael Love, Assistant Professor, Biostatistics & Genetics"
+title: "Bayesian Hierarchical Modeling of <br> Cell-Type-Specific Gene Regulation"
+author: "Michael Love, <br> Assistant Professor, <br> Dept of Biostatistics <br> Dept of Genetics"
 output: 
   revealjs::revealjs_presentation:
     transition: slide
     highlight: kate
+    theme: beige
 ---
 
 ```{r include=FALSE, cache=FALSE}
@@ -121,19 +122,22 @@ lines(s, 100*zz/sum(zz), col="purple")
 
 ## A simple hierarchical model to start
 
-<br><br><br>
+<br><br>
 
 $$
 \begin{align} 
-y_i \mid \mu_i &\sim N(\mu_i, \sigma^2=1) \\
+y_i &\sim N(\mu_i, \sigma^2=1) \\
 \mu_i &\sim N(0, \sigma^2=A) \\
-\hat{\mu}_i^{Bayes} \mid A &= \left(1 - \frac{1}{A+1} \right) y_i
 \end{align}
 $$
 
-<br><br>
+<div class="fragment">
+$$
+\hat{\mu}_i^{Bayes} = \left(1 - \frac{1}{A+1} \right) y_i
+$$
+</div>
 
-<p style="font-size: 12px; text-align:center">
+<p style="font-size: 14px; text-align:center">
 "Stein's Estimation Rule and Its Competitors - An Empirical Bayes Approach."
 Bradley Efron and Carl Morris, <br>
 Journal of the American Statistical Association,
@@ -215,8 +219,8 @@ $k(i)$ gives the region for school $i$.
 
 \[
 \begin{align}
-y_i \mid \mu_i &\sim N(\mu_i, 1) \\
-\mu_i \mid \theta_{k(i)} &\sim N(\theta_{k(i)}, 1) \\
+y_i &\sim N(\mu_i, 1) \\
+\mu_i &\sim N(\theta_{k(i)}, 1) \\
 \theta_k &\sim N(0, 5)
 \end{align}
 \]
@@ -233,8 +237,8 @@ y_i \mid \mu_i &\sim N(\mu_i, 1) \\
 
 \[
 \begin{align}
-y_i \mid \mu_i &\sim N(\mu_i, 1) \\
-\mu_i \mid \theta_{k(i)} &\sim N(\theta_{k(i)}, 1) \\
+y_i &\sim N(\mu_i, 1) \\
+\mu_i &\sim N(\theta_{k(i)}, 1) \\
 \theta_k &\sim N(0, 5)
 \end{align}
 \]
@@ -306,7 +310,7 @@ look at posterior distributions:
 
 <p class="fragment">When will Bayes $>$ a simpler per-region estimator?</p>
 
-<p class="fragment">James-Stein $\approx \left(1 - \frac{V_y}{V_\mu + V_y} \right)$ to shrink</p>
+<p class="fragment">James-Stein shrinks by $\approx \left(1 - \frac{V_y}{V_\mu + V_y} \right)$</p>
 
 ## When are Bayesian models useful?
 
@@ -357,16 +361,16 @@ determining ... binding* [NAR](https://academic.oup.com/nar/article/45/4/1805/26
 
 ## BHM applied to neuronal assays in Stein lab
 
-<div class="fragment">
+<br>
+
+<div class="fragment" style="text-align:left">
 - MR Locus
     - asks: $\uparrow$ eQTL, $\uparrow$ GWAS?
     - mixture modeling of all effects, no thresholding
-    - uncertainty on the $\beta$ effect sizes
+    - uncertainty on the effect sizes
 </div>
 
-<br>
-
-<div class="fragment">
+<div class="fragment" style="text-align:left">
 - pathQTL
     - cell-type-specific mediation across multiple "layers"
     - as in the TF binding case, focus on cell-type diffs
