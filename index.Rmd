@@ -357,14 +357,18 @@ determining ... binding* [NAR](https://academic.oup.com/nar/article/45/4/1805/26
 
 ## BHM applied to neuronal assays in Stein lab
 
+<div class="fragment">
 - MR Locus
-    - aim: estimate the strength of signal for $\uparrow$ eQTL, $\uparrow$ GWAS
-    - heuristic: condition analysis, $\beta$-eCAVIAR, threshold on $\beta$, simple linear regression
-    - the mixture model for small / large effects obviates need to threshold
-    - include uncertainty on the $\beta$ (?)
+    - asks: $\uparrow$ eQTL, $\uparrow$ GWAS?
+    - mixture modeling of all effects, no thresholding
+    - uncertainty on the $\beta$ effect sizes
+</div>
 
+<br>
+
+<div class="fragment">
 - pathQTL
-    - aim: cell-type specific mediation paths, incorporate multiple layers
-    - heuristic: mediation on cell types separately
-    - similar to the TF binding case, focus on cell-type diffs
-    - incorporate SNR into the mediation model (?)
+    - cell-type-specific mediation across multiple "layers"
+    - as in the TF binding case, focus on cell-type diffs
+    - incorporate SNR into the mediation
+</div>
