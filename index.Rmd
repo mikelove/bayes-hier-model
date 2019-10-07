@@ -34,12 +34,12 @@ Mouse brain, dentate gyrus. Livet, Weissman, Sanes and Lichtman/Harvard Universi
 
 <br>
 
-> - A **parametric model** for regulation
+> - A <u>parametric model</u> for regulation
 > - Parameters will represent an abstract relationship
 > - E.g. SNP $\rightarrow$ expression, or SNP $\rightarrow$ chromatin accessibility
-> - A **hierarchy** to compare these across cell types
-> - Specify (arbitrary) **distributions** relating parameters to e/o
-> - **Bayes** theory and comp. frameworks to make inference
+> - A <u>hierarchy</u> to compare these across cell types
+> - Specify distributions relating parameters to e/o
+> - <u>Bayes</u> theory and comp. frameworks to make inference
 
 ## What is a likelihood? 
 
